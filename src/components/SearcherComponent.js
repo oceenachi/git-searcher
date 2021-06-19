@@ -37,8 +37,9 @@ const SearcherComponent = () => {
 const StyledSearcher = styled.div`
     text-align: center;
     color: var(--textWhite);
-    width: 50%;
-    /* margin-bottom: 5rem; */
+    min-width: 45%;
+    margin-bottom: 5rem;
+
 
 .form-header {
     font-size: 2.4rem;
