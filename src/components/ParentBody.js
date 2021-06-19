@@ -5,7 +5,7 @@ import SearcherComponent from './SearcherComponent'
 import repoData from '../utils/data/repos.json'
 import UserCard from './UserCard'
 
-const ParentBody = ({children}) => {
+const ParentBody = ({children, onType}) => {
   const [repo, setRepo] = useState([])
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const ParentBody = ({children}) => {
 
 
     return (
-        <StyledParentBody className="parentBody container" >
+        <StyledParentBody className="parentBody container" onType={onType}>
           <SearcherComponent/>
             <div className="card-parent">
                 {/* {children} */}
@@ -54,8 +54,15 @@ const StyledParentBody = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  overflow-y: scroll;
   height: 100vh;
+  flex-direction: ${({onType})=> onType ? "row" : "column"};
+  align-items: ${({onType})=> onType ? "flex-start" : "center"};
+  justify-content: ${({onType})=> onType ? "flex-start" : "space-around"};
+  height: ${({onType})=> onType ? "100%" : "100vh"};
+  /* transition: ${({onType})=> onType ? "all 8s ease" : "none"}; */
+
+
+  overflow-y: scroll;
   border: 1px white solid;
 
   .card-parent{
