@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 import RepoCard from './RepoCard'
 import SearcherComponent from './SearcherComponent'
 import repoData from '../utils/data/repos.json'
-import UserCard from './UserCard'
+import UserCard from './UserCard';
+import {useDispatch} from "react-redux";
+import { makeCall } from '../redux/action'
 
-const ParentBody = ({children, onType}) => {
+const ParentBody = ({children}) => {
+
+  const dispatch = useDispatch();
   const [repo, setRepo] = useState([])
+  const [onType, setOnType] = useState(true);
 
-  useEffect(() => {
-    setRepo(repoData.items)
+  // useEffect(() => {
+  //   setRepo(repoData.items)
+  // }, [])
+
+// setTimeout(()=> {
+//   setOnType(true);
+
+// }, 5000)
+  
+
+  useEffect(()=> {
+    dispatch(makeCall())
   }, [])
 
 
     return (
-        <StyledParentBody className="parentBody container" onType={onType}>
+        <StyledParentBody className="parentBody container" onType={true}>
           <SearcherComponent/>
             <div className="card-parent">
                 {/* {children} */}
@@ -48,6 +63,18 @@ const ParentBody = ({children, onType}) => {
     )
 }
 
+const rotate = keyframes`
+from{
+  left: 200px;
+  top: 200px;
+}
+to{
+  left: 0;
+  top: 0;
+}
+
+`;
+
 const StyledParentBody = styled.div`
 
   display: flex;
@@ -59,8 +86,12 @@ const StyledParentBody = styled.div`
   align-items: ${({onType})=> onType ? "flex-start" : "center"};
   justify-content: ${({onType})=> onType ? "flex-start" : "space-around"};
   height: ${({onType})=> onType ? "100%" : "100vh"};
+  position: relative;
   /* transition: ${({onType})=> onType ? "all 8s ease" : "none"}; */
+  /* transition:  all 8s ease; */
+  animation: ${({onType}) => onType ? rotate: null} 2s linear;
 
+  
 
   overflow-y: scroll;
   border: 1px white solid;
@@ -74,5 +105,6 @@ const StyledParentBody = styled.div`
   }
 
 `;
+
 
 export default ParentBody
