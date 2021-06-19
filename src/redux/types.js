@@ -1,0 +1,2 @@
+export const REPOSUCCESS = 'REPOSUCCESS';
+export const CALL_SUCCESS = 'CALL_SUCCESS';
