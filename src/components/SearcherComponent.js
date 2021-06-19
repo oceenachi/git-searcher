@@ -4,27 +4,29 @@ import styled from 'styled-components'
 const SearcherComponent = () => {
     return (
         <StyledSearcher>
-            <div className="search-title">
+            <div className="search-title-wrapper">
                 <img src="./images/black-github.png" alt="github logo" className="logo" />
+                <div>
                 <h1 className="form-header">GitHub Searcher</h1>
                 <p className="form-sub-title">Search users or repositories below</p>
+
+                </div>
+              
             </div>
             <div className="search-wrapper">
                 <div className="search-wrapper-input">
-                    <label for="username" class="search-label" >Enter Keywords or text</label>
-                    <input type="text" name="" id="username" class="search" placeholder="Start typing to search ..." />
+                    <label for="keyword" class="search-label" >Enter Keywords or text</label>
+                    <input type="text" name="keyword" id="keyword" class="search" placeholder="Start typing to search ..." />
 
                 </div>
                 <div className="search-wrapper-select">
-                    <label for="username" class="search-label" >Select Entity</label>
+                    <label for="entity" class="search-label" >Select Entity</label>
 
                     <select name="entity" id="entity">
                         <option value="users">Users</option>
                         <option value="repositories">Repositories</option>
                     </select>
                 </div>
-
-
 
             </div>
 
@@ -35,8 +37,8 @@ const SearcherComponent = () => {
 const StyledSearcher = styled.div`
     text-align: center;
     color: var(--textWhite);
-    min-width: 50%;
-
+    width: 50%;
+    /* margin-bottom: 5rem; */
 
 .form-header {
     font-size: 2.4rem;
@@ -52,27 +54,31 @@ const StyledSearcher = styled.div`
     display: block;
     margin: auto;
 }
-.search-title{
-    margin-bottom: 5rem;
+.search-title-wrapper{
+    margin-bottom: 3rem;
 }
 .search-wrapper{
-    background-color: #161b22;
+  background-color: #161b22;
   border: 1px solid #21262d;
   border-radius: 6px;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  box-shadow: rgb(35 33 41 / 56%) 0px 2px 10px 3px;
 
 }
 .search-wrapper-input{
-    flex: 3;
-
+    flex-basis: 65%;
 }
 .search-wrapper-select{
-    flex: 1;
-
+    flex-basis: 25%;
 }
+input:focus, select:focus{
+    background: #c9d1d9 !important;
+    color: black !important;
+}
+
 .search-wrapper input, select{
     margin-top: 5px;
     margin-bottom: 15px;
