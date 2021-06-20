@@ -1,57 +1,155 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { GoRepo } from "react-icons/go";
 import { BsBuilding, BsEnvelope, BsFileCode, BsLink45Deg, BsStar, BsPeople } from "react-icons/bs";
 import { VscTwitter } from "react-icons/vsc"
+import { useDispatch, useSelector } from 'react-redux';
+import { changeParams, getCall, getUsers, makeCall, setLoading } from '../redux/action';
+import { ScaleLoader } from 'react-spinners';
 
 
 const UserCard = ({bio}) => {
-    console.log({bio})
+    const singleUser = useSelector((state) => state.usersReducer[bio.login]);
+
+    const [loadUser, setLoadUser] = useState(false)
+
+    useEffect(() => {
+        if(singleUser === undefined){
+            dispatch(getUsers(bio.login, bio.url)).then(()=> {
+                setLoadUser(true)
+                console.log('sfsdfsfsfsd')
+            });
+        }else{
+            setLoadUser(true)
+
+        }
+
+    }, [])
+    console.log({singleUser});
+
+    /*
+        {
+            "login": "todo",
+            "id": 57632,
+            "node_id": "MDQ6VXNlcjU3NjMy",
+            "avatar_url": "https://avatars.githubusercontent.com/u/57632?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/todo",
+            "html_url": "https://github.com/todo",
+            "followers_url": "https://api.github.com/users/todo/followers",
+            "following_url": "https://api.github.com/users/todo/following{/other_user}",
+            "gists_url": "https://api.github.com/users/todo/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/todo/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/todo/subscriptions",
+            "organizations_url": "https://api.github.com/users/todo/orgs",
+            "repos_url": "https://api.github.com/users/todo/repos",
+            "events_url": "https://api.github.com/users/todo/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/todo/received_events",
+            "type": "User",
+            "site_admin": false,
+            "score": 1.0
+        }
+
+        {
+    "login": "todo",
+    "id": 57632,
+    "node_id": "MDQ6VXNlcjU3NjMy",
+    "avatar_url": "https://avatars.githubusercontent.com/u/57632?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/todo",
+    "html_url": "https://github.com/todo",
+    "followers_url": "https://api.github.com/users/todo/followers",
+    "following_url": "https://api.github.com/users/todo/following{/other_user}",
+    "gists_url": "https://api.github.com/users/todo/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/todo/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/todo/subscriptions",
+    "organizations_url": "https://api.github.com/users/todo/orgs",
+    "repos_url": "https://api.github.com/users/todo/repos",
+    "events_url": "https://api.github.com/users/todo/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/todo/received_events",
+    "type": "User",
+    "site_admin": false,
+    "name": "Yu-Lun Chen",
+    "company": null,
+    "blog": "",
+    "location": null,
+    "email": null,
+    "hireable": null,
+    "bio": null,
+    "twitter_username": null,
+    "public_repos": 82,
+    "public_gists": 0,
+    "followers": 32,
+    "following": 10,
+    "created_at": "2009-02-24T21:42:57Z",
+    "updated_at": "2021-05-18T00:55:29Z"
+}
+
+    */
+        const [fetchUser, setFetchUser] = useState(bio.url);
+
+        const [user, setUser] = useState({})
+
+
+        const dispatch = useDispatch();
+    
+        // const handleChange = (e) => {
+        //     setFetchDetails({...fetchDetails, [e.target.name]: e.target.value})
+        // }
+
+        useEffect(()=>{
+
+        },[loadUser])
+
     return (
         <StyledUserCard>
             <div className="full-card">
                 <div className="top-section">
                     <div className="avatar-box">
-                        <img src="/images/avatar.png" alt="" className="avater"/>
+                        <img src={`${(singleUser||bio).avatar_url}`} alt="" className="avatar"/>
                     </div>
                     <div className="brief-intro">
-                        <p className="info full-name">Asami Sato</p>
-                        <p className="info login">@login</p>
-                        <p className="info bio" title={bio}>{bio.split(" ").length > 8 ? bio.split(" ").slice(0, 8).join(" ") + "..." : bio}</p>
+                        <p className="info full-name">{(loadUser && singleUser.name) || " e"}</p>
+                        <p className="info login">{`@${(singleUser||bio).login}`}</p>
+                        <p className="info bio" title={'bio'}>{
+                        loadUser && singleUser.bio && (singleUser.bio?.split(" ").length > 8 ? singleUser.bio?.split(" ").slice(0, 8).join(" ") + "..." : singleUser.bio)
+                  
+                        }</p>
                         
                     </div>
                 </div>
             </div>
             <div>
-                <div className="bottom-section">
+                { !loadUser? <ScaleLoader/>: <div className="bottom-section">
                     <hr />
                     <p title="Email" className="info email">
                         <span className="git-icon">
                             <BsEnvelope />
                         </span>
-                        AsamiSato@gmail.com
+                        {singleUser.email}
                     </p>
                     <p title="Personal Website" className="info website">
                         <span className="git-icon">
                             <BsLink45Deg />
                         </span>
-                        <a href="https://www.giftegwuenu.dev/" target="_blank">https://www.giftegwuenu.dev/</a>
+                        <a href={singleUser.blog} target="_blank">{singleUser.blog}</a>
                     </p>
                     <p title="Twitter" className="info twitter">
                         <span className="git-icon">
                             <VscTwitter />
                         </span>
-                        <a href="https://www.giftegwuenu.dev/" target="_blank">@code_cuddle</a>
+                        <a href={`https://twitter.com/${singleUser.twitter_username}`} target="_blank">{`@${singleUser.twitter_username}`}</a>
                     </p>
                     <p title="Company" className="info Company">
                         <span className="git-icon">
                             <BsBuilding />
                         </span>
-                         @decagonhq
+                        {singleUser.company}
                     </p>
-                    
-                    <p className="info">Open To Hire: Yes</p>
-                </div>
+                    <p className="info">{`Location: ${singleUser.location}`}</p>
+
+                    <p className="info">{`Open To Hire: ${singleUser.hireable ? "Yes" : "No"}`}</p>
+                </div>}
                 <div className="activity-section">
                     <p title="Repositories"><span className="git-icon"><GoRepo /></span> 150</p>
                     <p title="Github Gist"><span className="git-icon"><BsFileCode className="edit-icon"/></span> 10</p>
@@ -60,7 +158,7 @@ const UserCard = ({bio}) => {
                     <p title="Github Star"><span className="git-icon"><BsStar /></span> 10</p>
                 </div>
             </div>
-            
+   
         </StyledUserCard>
     )
 }
@@ -73,7 +171,6 @@ const StyledUserCard = styled.div`
     border: 1px solid #21262d;
     min-height:  300px;
     color: var(--textWhite);
-    /* overflow-y: hidden; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
