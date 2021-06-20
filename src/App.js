@@ -1,8 +1,8 @@
 import { Provider } from "react-redux";
 import ParentBody from "./components/ParentBody";
 import { PersistGate } from "redux-persist/integration/react";
-import configStore from "./stateConfig.js/configureStore";
-import persistor from "./stateConfig.js/configureStore";
+import configStore from "./redux/configureStore";
+import persistor from "./redux/configureStore";
 import {ScaleLoader} from "react-spinners"
 
 
