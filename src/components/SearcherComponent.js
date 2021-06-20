@@ -1,7 +1,27 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components';
+import {useDispatch} from 'react-redux';
+import { changeParams, makeCall } from '../redux/action';
 
-const SearcherComponent = () => {
+const SearcherComponent = (props) => {
+    const [fetchDetails, setFetchDetails] = useState({query: '', entity: 'users'})
+
+    console.log({props})
+
+    const dispatch = useDispatch();
+
+    const handleChange = (e) => {
+        setFetchDetails({...fetchDetails, [e.target.name]: e.target.value,page:1})
+    }
+
+    useEffect(()=>{
+        if(fetchDetails.query.length > 3) {
+            dispatch(makeCall(fetchDetails));
+            
+        }
+        dispatch(changeParams(fetchDetails));
+    },[fetchDetails])
+
     return (
         <StyledSearcher>
             <div className="search-title-wrapper">
@@ -15,14 +35,14 @@ const SearcherComponent = () => {
             </div>
             <div className="search-wrapper">
                 <div className="search-wrapper-input">
-                    <label for="keyword" class="search-label" >Enter Keywords or text</label>
-                    <input type="text" name="keyword" id="keyword" class="search" placeholder="Start typing to search ..." />
+                    <label htmlFor="query" class="search-label" >Enter Query or Keywords</label>
+                    <input type="text" name="query" id="query" value={fetchDetails.query} className="search" placeholder="Start typing to search ..." onChange={handleChange} />
 
                 </div>
                 <div className="search-wrapper-select">
-                    <label for="entity" class="search-label" >Select Entity</label>
+                    <label htmlFor="entity" className="search-label" >Select Entity</label>
 
-                    <select name="entity" id="entity">
+                    <select name="entity" id="entity" onChange={handleChange} value={fetchDetails.entity}>
                         <option value="users">Users</option>
                         <option value="repositories">Repositories</option>
                     </select>
