@@ -1,62 +1,71 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import {useSelector} from "react-redux";
 import styled, {keyframes} from 'styled-components'
 import RepoCard from './RepoCard'
 import SearcherComponent from './SearcherComponent'
-import repoData from '../utils/data/repos.json'
 import UserCard from './UserCard';
 import {useDispatch} from "react-redux";
-import { makeCall } from '../redux/action'
+import configStore from "../redux/configureStore";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { MoonLoader } from 'react-spinners';
+import { makeCall } from '../redux/action';
 
-const ParentBody = ({children}) => {
 
+const ParentBody = ({onType}) => {
+
+
+
+  console.log({dat: configStore.store.getState()})
   const dispatch = useDispatch();
-  const [repo, setRepo] = useState([])
-  const [onType, setOnType] = useState(true);
 
-  // useEffect(() => {
-  //   setRepo(repoData.items)
-  // }, [])
 
-// setTimeout(()=> {
-//   setOnType(true);
-
-// }, 5000)
+  const [data, setData] = useState(null);
   
+  const entity = useSelector((state) => state.searchReducer );
+  
+  const response= useSelector((state) => {
+    let searcher = state.searchReducer
 
-  useEffect(()=> {
-    dispatch(makeCall())
-  }, [])
+    console.log({state})
+    
+    if (entity.entity == 'users') {
+      return state.userSearchReducer[entity.query] || {
+        items: []
+      }
+    } else {
+      return state.repoSearchReducer[entity.query] || {
+        items: []
+      }
+    }
+  });
 
+  const {total_count} = response;  
+
+  const fetchMoreData = () =>{
+    console.log("called infinite")
+    console.log({entity, response})
+    dispatch(makeCall({...entity, page: ++response.page}));
+  }
+  console.log({response})
+
+
+  console.log({entity});
 
     return (
-        <StyledParentBody className="parentBody container" onType={true}>
+        <StyledParentBody className="parentBody container" onType={onType}>
           <SearcherComponent/>
-            <div className="card-parent">
-                {/* {children} */}
-                {/* { repo.map(item => <RepoCard item={item} />)} */}
+            {/* <div className="card-parent"> */}
+              <InfiniteScroll
+              dataLength={response.items.length}
+              next={fetchMoreData}
+              hasMore={!response.incomplete_results}
+              loader={<MoonLoader/>}
+              >
+                { entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id}/> )}
+              </InfiniteScroll>
 
-                    {/* <RepoCard/>
-                    <RepoCard/>
 
-                    <RepoCard/>
-                    <RepoCard/>
-                    <RepoCard/>
-
-                    <RepoCard/> 
-                    <RepoCard/>
-                    <RepoCard/>
-
-                    <RepoCard/>
-                    <RepoCard/>
-                    <RepoCard/>
-
-                    <RepoCard/> */}
-                {/* <UserCard bio="Sofware Engineer"/>
-                <UserCard bio="Sofware Engineer in the ritual making money of selling tomatoes"/>
-                <UserCard bio=""/> */}
-               
-
-            </div>
+            {/* </div> */}
          
             
         </StyledParentBody>
@@ -81,11 +90,11 @@ const StyledParentBody = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 100vh;
+  /* height: 100%; */
   flex-direction: ${({onType})=> onType ? "row" : "column"};
   align-items: ${({onType})=> onType ? "flex-start" : "center"};
   justify-content: ${({onType})=> onType ? "flex-start" : "space-around"};
-  height: ${({onType})=> onType ? "100%" : "100vh"};
+  /* height: ${({onType})=> onType ? "100%" : "100vh"}; */
   position: relative;
   /* transition: ${({onType})=> onType ? "all 8s ease" : "none"}; */
   /* transition:  all 8s ease; */
