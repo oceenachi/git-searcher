@@ -2,8 +2,8 @@
   --black: #24292e;
   --deepBlack: #0d1117;
   --textWhite: #C9D1D9;
-}
 
+}
 
 * {
   box-sizing: border-box;
@@ -16,7 +16,6 @@ html {
     Segoe UI Emoji;
 }
 body{
-  font-size: var(--defaultFontSize);
   scroll-behavior: smooth;
   background-color: var(--deepBlack);
   line-height: 1;
