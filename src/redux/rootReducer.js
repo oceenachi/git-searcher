@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
-import repoReducer from "./reducers/repoReducer";
+import { repoSearchReducer, userSearchReducer, usersReducer, searchReducer} from "./reducers/entityReducer";
 
 
 const rootReducer = combineReducers({
-    repoReducer
+    repoSearchReducer, userSearchReducer, searchReducer, usersReducer
 });
 
 export default rootReducer;
