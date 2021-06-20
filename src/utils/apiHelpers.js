@@ -1,6 +1,7 @@
 import axios from "axios";
 
 
+
 axios.interceptors.response.use(handleSuccess, handleError
 
 );
@@ -27,7 +28,8 @@ export const apiGet= (path)=>{
  
     const config = {
         headers: {
-          Accept: 'application/vnd.github.v3+json'
+          Accept: 'application/vnd.github.v3+json',
+          Authorization: 'token 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'
         },
       };
     // return axios.get(`${process.env.REACT_APP_BASE_URL}${path}`, config);
