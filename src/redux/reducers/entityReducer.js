@@ -2,7 +2,7 @@ import * as types from "../types";
 
 const initialReposState = {}
 const initialUsersState = {}
-const initialSearchState = {query: "", entity: 'user'}
+const initialSearchState = {query: "", entity: 'user', load: false}
 
 
 export const repoSearchReducer = (state=initialReposState, action) => {
@@ -40,6 +40,8 @@ export const searchReducer = (state=initialSearchState, action) => {
     switch(action.type) {
         case types.CHANGE_FETCH_PARAM:
             return {...state, query: action.payload.query, entity: action.payload.entity}
+        case types.LOADING:
+            return {...state, load: action.payload}
         default:
             return state; 
     }
@@ -55,25 +57,3 @@ export const usersReducer = (state=initialUsersState, action) => {
     }
 }
 
-
-
-
-// export default repoReducer;
-
-
-
-/*
-Repos : {
-    query: []
-}
-
-Users: {
-    query: []
-}
-
-User: {
-    name: {}
-}
-
-
-*/
