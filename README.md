@@ -10,6 +10,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Clone down this repository. You will need `node` and `yarn` installed globally on your machine.  
 
+Visit [github]( https://github.com/) to create an oAuth token and to your env file. At the end your .env file should look like the .env.example file
+
 Installation (run command in terminal):
 
 `yarn`  
@@ -28,15 +30,17 @@ To Visit App:
 
 ## Reflection
 
-    - This projects aims to create a solution that interacts with the already existing github search api and provide client and users information about different users and their repositories on github. This solution focuses on the frontend and tries to creata a pleasinfg interface that can be worked with. Real life scenarios where this solution can be used include job|talent search, searching for users with particular skill sets, open source and other project search. 
+    - This projects aims to create a solution that interacts with the already existing github search api and provide client and users information about different users and their repositories on github. This solution focuses on the frontend and tries to creata a pleasinfg interface that can be worked with. Real life scenarios where this solution can be used include job|talent search, searching for users with particular skill sets, open source and other project search.
 
-    - I approadched this application with a ......... approach. Focusing on parts of the application before venturing into other complex logic. 
+    - I approached this application with a lean approach Focusing on smaller parts of the application before venturing into other complex logic. 
 
-    - The technologies used and my choices for them include: 
+    - The technologies used and my reason for these choices include: 
 
-        React which is a Component-Based Javascript framework that allows for building of user interfaces based on components that manage their own state. 
+        React which is a Component-Based Javascript framework that allows for building of user interfaces based on components that manage their own state. The flexibility of react 
         
-        Using redux and redux-persist allows for easy management of the state and allows for a certain level of app functionality when offline.
+        There are lot of network calls going on in the application. The choice to use redux and redux-persist allowed for easy state management and persistence if data into local storage to avoid repetition of query already retrieved and improving optimisation. This also allows for a certain level of app functionality when offline.
+
+        I also implemented debounce to make sure I don't make api calls unnecessarily
 
         Axios for api calls
 
