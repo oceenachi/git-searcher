@@ -19,7 +19,6 @@ const UserCard = ({ bio }) => {
         if (singleUser === undefined) {
             dispatch(getUsers(bio.login, bio.url)).then(() => {
                 setLoadUser(true)
-                // console.log('sfsdfsfsfsd')
             });
         } else {
             setLoadUser(true)

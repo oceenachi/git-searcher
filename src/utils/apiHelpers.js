@@ -7,9 +7,15 @@ axios.interceptors.response.use(handleSuccess, handleError);
 
 function handleError(err){
 
-    if(err.response.status >= 400){
+    if(err.status >= 400){
+        console.log({err})
         // console.log({err})
-        toast.error(err);
+        // err.then((err)=> {
+        //     console.log({err})
+        //     toast.error(err);
+
+
+        // })
         
         return {error:true, data:err};
     }

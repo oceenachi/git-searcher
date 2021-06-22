@@ -33,7 +33,7 @@ const RepoCard = ({ item }) => {
     // console.log({singleUser});
 
     /*
-    archive_url: "https://api.github.com/repos/mikegcoleman/todo/{archive_format}{/ref}"
+archive_url: "https://api.github.com/repos/mikegcoleman/todo/{archive_format}{/ref}"
 archived: false
 assignees_url: "https://api.github.com/repos/mikegcoleman/todo/assignees{/user}"
 blobs_url: "https://api.github.com/repos/mikegcoleman/todo/git/blobs{/sha}"

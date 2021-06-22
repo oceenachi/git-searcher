@@ -69,7 +69,7 @@ const ParentBody = () => {
   // console.log({ entity });
 
   return (
-    <NewParentBody className="container">
+    <NewParentBody className="container" onData={onData}>
           
     <StyledParentBody className="parentBody" onData={onData}>
      
@@ -108,7 +108,6 @@ to{
 `;
 
 const StyledParentBody = styled.div`
-
   display: flex;
   flex-direction: ${({ onData }) => onData ? "row" : "column"};
   align-items: ${({ onData }) => onData ? "flex-start" : "center"};
@@ -122,14 +121,15 @@ const StyledParentBody = styled.div`
 `;
 const NewParentBody = styled.div`
   height: ${({ onData }) => onData ? "100%" : "100vh"};
+  /* height: 100%; */
   width: 100%;
   overflow-y: scroll;
   border: 1px white solid;
   .card-parent{
     display: grid;
     grid-gap: 3.5rem;
-    /* grid-template-columns: repeat(auto-fit, minmax(27rem, 33rem)); */
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 33rem));
+    /* grid-template-columns: repeat(3, 1fr); */
     width: 100%;
     justify-content: center;
     border: 1px red solid;
@@ -140,7 +140,4 @@ const NewParentBody = styled.div`
   }
 
 `;
-
-
-
 export default ParentBody
