@@ -3,21 +3,23 @@ import styled from 'styled-components';
 import {useDispatch} from 'react-redux';
 import { changeParams, makeCall } from '../redux/action';
 
-const SearcherComponent = (props) => {
-    const [fetchDetails, setFetchDetails] = useState({query: '', entity: 'users'})
-
-    console.log({props})
-
+const SearcherComponent = () => {
     const dispatch = useDispatch();
 
+    const [fetchDetails, setFetchDetails] = useState({query: '', entity: 'users'})
+
+    // console.log({props})
+
+
+    //custom  handle change method for input and select component
     const handleChange = (e) => {
         setFetchDetails({...fetchDetails, [e.target.name]: e.target.value,page:1})
     }
 
+    //custom hook to search github
     useEffect(()=>{
         if(fetchDetails.query.length > 3) {
             dispatch(makeCall(fetchDetails));
-            
         }
         dispatch(changeParams(fetchDetails));
     },[fetchDetails])
@@ -35,7 +37,7 @@ const SearcherComponent = (props) => {
             </div>
             <div className="search-wrapper">
                 <div className="search-wrapper-input">
-                    <label htmlFor="query" class="search-label" >Enter Query or Keywords</label>
+                    <label htmlFor="query" className="search-label" >Enter Query or Keywords</label>
                     <input type="text" name="query" id="query" value={fetchDetails.query} className="search" placeholder="Start typing to search ..." onChange={handleChange} />
 
                 </div>
