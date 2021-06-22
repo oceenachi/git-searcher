@@ -14,7 +14,6 @@ function App() {
     <>
       <Provider store={configStore.store}>
         <PersistGate
-          // loading={<ScaleLoader />}
           persistor={configStore.persistor}
         >
           <ErrorBoundary>

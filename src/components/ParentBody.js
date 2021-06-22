@@ -5,18 +5,18 @@ import RepoCard from './RepoCard'
 import SearcherComponent from './SearcherComponent'
 import UserCard from './UserCard';
 import { useDispatch } from "react-redux";
-import configStore from "../redux/configureStore";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MoonLoader } from 'react-spinners';
 import { makeCall } from '../redux/action';
+import { toast } from 'react-toastify';
 
 
 const ParentBody = () => {
 
+  const [onData, setOnData] = useState(false);
 
+  const errorState = useSelector(state => state.errorReducer.error);
 
-  // console.log({ dat: configStore.store.getState() })
-  const[onData, setOnData] = useState(false);
 
 
   //use dispatch hook
@@ -24,16 +24,13 @@ const ParentBody = () => {
 
 
 
-  // Get entity param from redux store
-  const [entity, setEntity] = useState({query: '', entity: 'users'});
+  // manually set entity param state
+  const [entity, setEntity] = useState({ query: '', entity: 'users' });
 
 
 
   // Get entity param from redux store
   const response = useSelector((state) => {
-    // let searcher = state.searchReducer
-
-    // console.log({ state })
 
     if (entity.entity == 'users') {
       return state.userSearchReducer[entity.query] || {
@@ -47,47 +44,39 @@ const ParentBody = () => {
   });
 
   useEffect(() => {
-    if(!(response.items.length === 0 )){
+    if (!(response.items.length === 0)) {
       setOnData(true);
     }
-   
+
   }, [response.items])
 
-  // const { total_count } = response;
 
   // custom data to fetch more data
   const fetchMoreData = () => {
-    console.log({entity})
-    console.log({entity2: {...entity}})
     dispatch(makeCall({ ...entity, page: ++response.page }));
   }
-  console.log({onData})
-
-  console.log({ response })
-
-
-  // console.log({ entity });
 
   return (
     <NewParentBody className="container" onData={onData}>
-          
-    <StyledParentBody className="parentBody" onData={onData}>
-     
-     <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity} onData={onData}/>
 
-   </StyledParentBody>
-   <InfiniteScroll
-       dataLength={response.items.length}
-       next={fetchMoreData}
-       hasMore={true}
-       loader={<MoonLoader />}
-       className="scrollComponent"
-     >
-       <div className="card-parent">
-         {entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
-       </div>
+      <StyledParentBody className="parentBody" onData={onData}>
 
-     </InfiniteScroll>
+        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity} onData={onData} />
+
+      </StyledParentBody>
+      <InfiniteScroll
+        dataLength={response.items.length}
+        next={fetchMoreData}
+        hasMore={true}
+        loader={<MoonLoader />}
+        className="scrollComponent"
+      >
+        <div className="card-parent">
+          {entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
+        </div>
+
+      </InfiniteScroll>
+      {errorState.error && toast.error(errorState.message)}
 
 
     </NewParentBody>
@@ -111,33 +100,37 @@ const StyledParentBody = styled.div`
   display: flex;
   flex-direction: ${({ onData }) => onData ? "row" : "column"};
   align-items: ${({ onData }) => onData ? "flex-start" : "center"};
-  justify-content: ${({ onData }) => onData ? "flex-start" : "space-around"};
+  justify-content: ${({ onData }) => onData ? "flex-start" : "center"};
   height: ${({ onData }) => onData ? "auto" : "100%"};
   position: relative;
   animation: ${({ onData }) => onData ? rotate : null} .5s linear;
   width: 100%;
-  border: 1px solid yellow;
 
 `;
 const NewParentBody = styled.div`
   height: ${({ onData }) => onData ? "100%" : "100vh"};
-  /* height: 100%; */
   width: 100%;
   overflow-y: scroll;
-  border: 1px white solid;
   .card-parent{
     display: grid;
     grid-gap: 3.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(25rem, 33rem));
-    /* grid-template-columns: repeat(3, 1fr); */
+    grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
     width: 100%;
-    justify-content: center;
-    border: 1px red solid;
+    justify-content: flex-start;
   }
 
   .infinite-scroll-component__outerdiv, .scrollComponent {
     width: 100%;
   }
+  @media screen and (max-width: 1016px) {
+
+    .card-parent{
+      grid-template-columns: repeat(auto-fit, minmax(24.5rem, 1fr));
+      justify-content: center;
+
+
+    }
+}
 
 `;
 export default ParentBody

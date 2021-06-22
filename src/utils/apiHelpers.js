@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 
 // intercept api response and implement error handling
@@ -8,21 +7,12 @@ axios.interceptors.response.use(handleSuccess, handleError);
 function handleError(err){
 
     if(err.status >= 400){
-        console.log({err})
-        // console.log({err})
-        // err.then((err)=> {
-        //     console.log({err})
-        //     toast.error(err);
-
-
-        // })
         
         return {error:true, data:err};
     }
 }
 
 function handleSuccess(response){
-    // console.log(response);
 
     return {response};
 

@@ -20,12 +20,21 @@ export const loading = (payload) => ({
     payload,
 })
 
+export const error = (payload) => ({
+    type: types.LOADING,
+    payload,
+})
+
+// export const loading = (payload) => ({
+//     type: types.LOADING,
+//     payload,
+// })
+
  //make call to the api
 export const makeCall = ({entity, query, page}) => async (dispatch) => {
     let perPage = 30;
 
-    const {response} = await apiGet(`https://api.github.com/search/${entity}?q=${query}&per_page=${perPage}&page=${page}`);
-    // debugger
+    const {response} = await apiGet(`${process.env.REACT_APP_SEARCH_URL}/${entity}?q=${query}&per_page=${perPage}&page=${page}`);
 
 
 // users search
@@ -129,10 +138,14 @@ export const makeCall = ({entity, query, page}) => async (dispatch) => {
 
     console.log({response3w: response})
 
-      if (response.status === 200) {
+      if (response.status === 200 ) {
+          if(!response.data.items.length){
+              console.log("error found")
+              dispatch("No data available");
+          }
           if(entity === "users"){
+
             stripUserSearchData(response);
-            console.log({response3: response})
 
             dispatch(callUserSuccess({ query, data: {...response.data, page}},page))
           }else{
@@ -328,7 +341,7 @@ const stripUsersData = (payload) => {
     let userItem = payload.data;
     console.log({userItem})
     const {
-        bio, avatar_url, email, followers, following, hireable, location, login, name,twitter_username,url
+        bio, avatar_url, email, followers, following, hireable, location, login, name, twitter_username,url
     } = userItem;
 
     payload.data= {bio, avatar_url, email, followers, following, hireable, location, login, name,twitter_username,url
