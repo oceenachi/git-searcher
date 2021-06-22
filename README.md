@@ -1,70 +1,69 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Github Searcher
 
-## Available Scripts
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). An application used to get information about a github user or a repository
 
-In the project directory, you can run:
+## Project Screen Shot(s)
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation and Setup Instructions
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Clone down this repository. You will need `node` and `yarn` installed globally on your machine.  
 
-### `yarn test`
+Installation (run command in terminal):
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`yarn`  
 
-### `yarn build`
+To Run Test Suite:  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`yarn test`  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To Start Server:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`yarn start`  
 
-### `yarn eject`
+To Visit App:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+`localhost:3000`  
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Reflection
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    - This projects aims to create a solution that interacts with the already existing github search api and provide client and users information about different users and their repositories on github. This solution focuses on the frontend and tries to creata a pleasinfg interface that can be worked with. Real life scenarios where this solution can be used include job|talent search, searching for users with particular skill sets, open source and other project search. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    - I approadched this application with a ......... approach. Focusing on parts of the application before venturing into other complex logic. 
 
-## Learn More
+    - The technologies used and my choices for them include: 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+        React which is a Component-Based Javascript framework that allows for building of user interfaces based on components that manage their own state. 
+        
+        Using redux and redux-persist allows for easy management of the state and allows for a certain level of app functionality when offline.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+        Axios for api calls
 
-### Code Splitting
+        React-toastify for error logging
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+        react-infinite-scroll to implement infinite scrolling
 
-### Analyzing the Bundle Size
+        Github for version control.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+        Netlify for hosting.
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  - The biggest issue I can say I had while working on this problem was state management. Trying to manage the state across all levels of the app and displaying the appropriate information to the client as necessary.
+  - Things that I believe would be implemented in the nearest future include: creating a dark and light theme to cater for different user preferences, improve state management logic and cater better for all state changes, properly test the application and ensure it has max coverage, improve optimiisation accross the system.
 
-### Advanced Configuration
+  Here are links to too some pages I have worked on:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  [Decagon Fellowship page](https://decagonhq.com/fellowship/)
 
-### Deployment
+  [Devconnect Austin](https://decagonhq.com/devconnectaustin/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+[Mentorship Campaign](https://decagonhq.com/devconnectaustinmentor/)
 
-### `yarn build` fails to minify
+[Linkedin Profile](https://www.linkedin.com/in/eze-francisca/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Link to Github Searcher: [Hosted App](https://unruffled-wiles-c754ee.netlify.app/)
+
+
+
+## Some Decisons made and the reasons behind them
