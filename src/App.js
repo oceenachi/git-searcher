@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import configStore from "./redux/configureStore";
-import { MoonLoader, ScaleLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import { ToastContainer } from "react-toastify";
 import ErrorBoundary from "./components/ErrorBoundary";
 const ParentBody = React.lazy(() => import("./components/ParentBody"));
@@ -14,7 +14,6 @@ function App() {
     <>
       <Provider store={configStore.store}>
         <PersistGate
-          loading={<ScaleLoader />}
           persistor={configStore.persistor}
         >
           <ErrorBoundary>
