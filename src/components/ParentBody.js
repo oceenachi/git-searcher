@@ -14,10 +14,11 @@ import { toast } from 'react-toastify';
 const ParentBody = () => {
 
   const [onData, setOnData] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const queryState = useSelector(state => state.searchReducer);
 
   // Extract a piece of the redux store
   const errorState = useSelector(state => state.errorReducer.error);
-
 
 
   //use dispatch hook
@@ -51,6 +52,12 @@ const ParentBody = () => {
 
   }, [response.items])
 
+  useEffect(() => {
+    if (queryState.query >= 3) {
+      setIsEmpty(true);
+    }
+
+  }, [response.items])
 
   // custom data to fetch more data
   const fetchMoreData = () => {
@@ -58,11 +65,11 @@ const ParentBody = () => {
   }
 
   return (
-    <NewParentBody className="container" onData={onData}>
+    <NewParentBody className="container" isEmpty={isEmpty} onData={onData}>
 
-      <StyledParentBody className="parentBody" onData={onData}>
+      <StyledParentBody className="parentBody"  isEmpty={isEmpty} onData={onData}>
 
-        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity} onData={onData} />
+        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity}  isEmpty={isEmpty} onData={onData} />
 
       </StyledParentBody>
       <InfiniteScroll
@@ -99,17 +106,23 @@ to{
 
 const StyledParentBody = styled.div`
   display: flex;
-  flex-direction: ${({ onData }) => onData ? "row" : "column"};
+  /* flex-direction: ${({ onData }) => onData ? "row" : "column"};
   align-items: ${({ onData }) => onData ? "flex-start" : "center"};
   justify-content: ${({ onData }) => onData ? "flex-start" : "center"};
   height: ${({ onData }) => onData ? "auto" : "100%"};
   position: relative;
-  animation: ${({ onData }) => onData ? rotate : null} .5s linear;
+  animation: ${({ onData }) => onData ? rotate : null} .5s linear; */
+  flex-direction: ${({ isEmpty }) => isEmpty ? "row" : "column"};
+  align-items: ${({ isEmpty }) => isEmpty ? "flex-start" : "center"};
+  justify-content: ${({ isEmpty }) => isEmpty ? "flex-start" : "center"};
+  height: ${({ isEmpty }) => isEmpty ? "auto" : "100%"};
+  position: relative;
+  animation: ${({ isEmpty }) => isEmpty ? rotate : null} .5s linear;
   width: 100%;
 
 `;
 const NewParentBody = styled.div`
-  height: ${({ onData }) => onData ? "100%" : "100vh"};
+  height: ${({ isEmpty }) => isEmpty ? "100%" : "100vh"};
   width: 100%;
   overflow-y: scroll;
   .card-parent{
@@ -128,8 +141,6 @@ const NewParentBody = styled.div`
     .card-parent{
       grid-template-columns: repeat(auto-fit, minmax(24.5rem, 1fr));
       justify-content: center;
-
-
     }
 }
 

@@ -22,10 +22,11 @@ function handleSuccess(response){
 //custom api helper to make http requests
 export const apiGet= (path)=>{
  
+    // add token generared from github as Authorization
     const config = {
         headers: {
           Accept: 'application/vnd.github.v3+json',
-          Authorization: '******'
+          Authorization: `Bearer ${process.env.REACT_APP_AUTH_TOKEN}`
         },
       };
     return axios.get(path, config);
