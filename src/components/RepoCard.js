@@ -8,23 +8,29 @@ import {ScaleLoader} from "react-spinners";
 
 
 const RepoCard = ({ item }) => {
-    const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
 
-    const singleUser = useSelector((state) => state.usersReducer[item.owner.login]);
-    // const loading = useSelector((state) => state.);
+    const dispatch = useDispatch();
 
+    const singleUser = useSelector((state) => state.usersReducer[item.owner.login]);
+
+
+    //effect hook to fetch data on page mount
     useEffect(() => {
         if(singleUser === undefined){
             dispatch(getUsers(item.owner.login, item.owner.url)).then(() => {
                 setLoading(false);
             });
-        }else{
-            // setLoading(false);
         }
 
     }, [])
-    console.log({singleUser});
+    // contributors_url: "https://api.github.com/repos/YangModels/yang/contributors"
+
+
+
+    
+
+    // console.log({singleUser});
 
     /*
     archive_url: "https://api.github.com/repos/mikegcoleman/todo/{archive_format}{/ref}"
@@ -124,12 +130,13 @@ type: "User"
 url: "https://api.github.com/users/mikegcoleman"
     */
 
-    console.log(item)
-    const { name, username, description, avatar, fork, contributions, watch, stars, organization, language, license, private: isPrivate, full_name: fullName, owner } =  item;
+    const { name, description, language, license, private: isPrivate, owner, forks_count, watchers_count, stargazers_count, open_issues_count } =  item;
 
+    //effect hook to watch out for loading state
     useEffect(() => {
 
     }, [loading])
+
     return (
         <StyledRepoCard avatar={owner.avatar_url}>
             <div className="card-repo-type">
@@ -161,16 +168,16 @@ url: "https://api.github.com/users/mikegcoleman"
 
                 <div className="repo-icons">
                     <span>
-                        <GoRepoForked /> {3}
+                        <GoRepoForked /> <sub>{forks_count}</sub>
                     </span>
                     <span>
-                        <GoDiffModified />
+                        <GoDiffModified /><sub>{open_issues_count}</sub>
                     </span>
                     <span>
-                        <GoEye />
+                        <GoEye /><sub>{watchers_count}</sub>
                     </span>
                     <span>
-                        <AiOutlineStar />
+                        <AiOutlineStar /><sub>{stargazers_count}</sub>
                     </span>
                     <span>
                         <GoOrganization />
@@ -194,8 +201,6 @@ const StyledRepoCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* font-size: 16px; */
-    /* letter-spacing: .3px; */
     position: relative;
     a{
         color: var(--textWhite);
@@ -232,7 +237,6 @@ const StyledRepoCard = styled.div`
         }
     }
     .repo-title{
-        /* margin: 2rem 0 0 0; */
         max-width: 70%;
         word-break: break-word;
         flex-direction: column;
@@ -244,13 +248,6 @@ const StyledRepoCard = styled.div`
         padding: 0 1rem;
         font-size: small;
     }
-    /* .repo-info-alert{
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-        border: 1px white solid;
-        border-radius: 50%;
-    } */
 
     .repo-avatar{
         border-radius: 50%;

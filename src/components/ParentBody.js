@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import {useSelector} from "react-redux";
-import styled, {keyframes} from 'styled-components'
+import { useSelector } from "react-redux";
+import styled, { keyframes } from 'styled-components'
 import RepoCard from './RepoCard'
 import SearcherComponent from './SearcherComponent'
 import UserCard from './UserCard';
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import configStore from "../redux/configureStore";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MoonLoader } from 'react-spinners';
 import { makeCall } from '../redux/action';
 
 
-const ParentBody = ({onType}) => {
+const ParentBody = ({ onType }) => {
 
 
 
-  console.log({dat: configStore.store.getState()})
+  // console.log({ dat: configStore.store.getState() })
+
+
+  //use dispatch hook
   const dispatch = useDispatch();
 
 
-  const [data, setData] = useState(null);
-  
-  const entity = useSelector((state) => state.searchReducer );
-  
-  const response= useSelector((state) => {
-    let searcher = state.searchReducer
 
-    console.log({state})
-    
+  // Get entity param from redux store
+  const entity = useSelector((state) => state.searchReducer);
+
+
+
+  // Get entity param from redux store
+  const response = useSelector((state) => {
+    // let searcher = state.searchReducer
+
+    // console.log({ state })
+
     if (entity.entity == 'users') {
       return state.userSearchReducer[entity.query] || {
         items: []
@@ -39,37 +45,42 @@ const ParentBody = ({onType}) => {
     }
   });
 
-  const {total_count} = response;  
+  // const { total_count } = response;
 
-  const fetchMoreData = () =>{
-    console.log("called infinite")
-    console.log({entity, response})
-    dispatch(makeCall({...entity, page: ++response.page}));
+  // custom data to fetch more data
+  const fetchMoreData = () => {
+    console.log({entity})
+    console.log({entity2: {...entity}})
+    dispatch(makeCall({ ...entity, page: ++response.page }));
   }
-  console.log({response})
+
+  // console.log({ response })
 
 
-  console.log({entity});
+  // console.log({ entity });
 
-    return (
-        <StyledParentBody className="parentBody container" onType={onType}>
-          <SearcherComponent/>
-            {/* <div className="card-parent"> */}
-              <InfiniteScroll
-              dataLength={response.items.length}
-              next={fetchMoreData}
-              hasMore={!response.incomplete_results}
-              loader={<MoonLoader/>}
-              >
-                { entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id}/> )}
-              </InfiniteScroll>
+  return (
+    <StyledParentBody className="parentBody container" onType={onType}>
+      <SearcherComponent />
+
+      <InfiniteScroll
+        dataLength={response.items.length}
+        next={fetchMoreData}
+        hasMore={!response.incomplete_results}
+        loader={<MoonLoader />}
+        className="scrollComponent"
+      >
+        <div className="card-parent">
+          {entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
+        </div>
+
+      </InfiniteScroll>
 
 
-            {/* </div> */}
-         
-            
-        </StyledParentBody>
-    )
+
+
+    </StyledParentBody>
+  )
 }
 
 const rotate = keyframes`
@@ -85,25 +96,24 @@ to{
 `;
 
 const StyledParentBody = styled.div`
-
+/* 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  /* height: 100%; */
-  flex-direction: ${({onType})=> onType ? "row" : "column"};
-  align-items: ${({onType})=> onType ? "flex-start" : "center"};
-  justify-content: ${({onType})=> onType ? "flex-start" : "space-around"};
-  /* height: ${({onType})=> onType ? "100%" : "100vh"}; */
+  justify-content: space-around; */
+  height: 100%;
+  flex-direction: ${({ onType }) => onType ? "row" : "column"};
+  align-items: ${({ onType }) => onType ? "flex-start" : "center"};
+  justify-content: ${({ onType }) => onType ? "flex-start" : "space-around"};
   position: relative;
-  /* transition: ${({onType})=> onType ? "all 8s ease" : "none"}; */
-  /* transition:  all 8s ease; */
-  animation: ${({onType}) => onType ? rotate: null} 2s linear;
-
-  
-
+  animation: ${({ onType }) => onType ? rotate : null} 2s linear;
+  width: 100%;
   overflow-y: scroll;
   border: 1px white solid;
+
+  .infinite-scroll-component__outerdiv, .scrollComponent {
+    width: 100%;
+  }
 
   .card-parent{
     display: grid;
