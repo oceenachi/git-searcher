@@ -1,23 +1,22 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 
-
-axios.interceptors.response.use(handleSuccess, handleError
-
-);
+// intercept api response and implement error handling
+axios.interceptors.response.use(handleSuccess, handleError);
 
 function handleError(err){
 
     if(err.response.status >= 400){
-        console.log({err})
-        alert(err);
+        // console.log({err})
+        toast.error(err);
         
         return {error:true, data:err};
     }
 }
 
 function handleSuccess(response){
-    console.log(response);
+    // console.log(response);
 
     return {response};
 
@@ -32,6 +31,5 @@ export const apiGet= (path)=>{
           Authorization: 'token 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'
         },
       };
-    // return axios.get(`${process.env.REACT_APP_BASE_URL}${path}`, config);
     return axios.get(path, config);
 }

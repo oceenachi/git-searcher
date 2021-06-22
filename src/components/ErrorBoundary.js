@@ -1,5 +1,6 @@
 import React from "react";
 
+//Custom error boundary to display error state when there is an error
 class ErrorBoundary extends React.Component {
     constructor(props) {
       super(props);
