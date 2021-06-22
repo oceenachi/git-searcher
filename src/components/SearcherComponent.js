@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import {useDispatch} from 'react-redux';
 import { changeParams, makeCall } from '../redux/action';
+import useDebounce from '../utils/useDebounce';
 
-const SearcherComponent = () => {
+const SearcherComponent = ({fetchDetails, setFetchDetails, onData}) => {
+    //custom dispatch hook
     const dispatch = useDispatch();
 
-    const [fetchDetails, setFetchDetails] = useState({query: '', entity: 'users'})
+
+      // Searching status (whether there is pending API request)
+    const [searching, setIsSearching] = useState(false);
+    const [error, setError] = useState("");
+
+    // const [fetchDetails, setFetchDetails] = useState({query: '', entity: 'users'})
 
     // console.log({props})
 
@@ -16,16 +23,30 @@ const SearcherComponent = () => {
         setFetchDetails({...fetchDetails, [e.target.name]: e.target.value,page:1})
     }
 
+    // Debounce search term so that it only gives us latest value ...
+    const debouncedQuery = useDebounce(fetchDetails.query, 2000);
+    console.log({debouncedQuery, fetchDetails});
+
+
     //custom hook to search github
     useEffect(()=>{
-        if(fetchDetails.query.length > 3) {
+        if(fetchDetails.query && fetchDetails.query.length >= 3 && debouncedQuery && debouncedQuery.length >= 3) {
+            console.log("fired one")
+            console.log({debouncedQuery});
+            console.log(fetchDetails.query)
+            setIsSearching(true);
+            setError("");
             dispatch(makeCall(fetchDetails));
+        }else{
+            setError("Query must be more than 2 characters");
         }
-        dispatch(changeParams(fetchDetails));
-    },[fetchDetails])
+        setIsSearching(false);
+
+        // dispatch(changeParams(fetchDetails));
+    },[fetchDetails, debouncedQuery])
 
     return (
-        <StyledSearcher>
+        <StyledSearcher onData={onData}>
             <div className="search-title-wrapper">
                 <img src="./images/black-github.png" alt="github logo" className="logo" />
                 <div>
@@ -39,6 +60,7 @@ const SearcherComponent = () => {
                 <div className="search-wrapper-input">
                     <label htmlFor="query" className="search-label" >Enter Query or Keywords</label>
                     <input type="text" name="query" id="query" value={fetchDetails.query} className="search" placeholder="Start typing to search ..." onChange={handleChange} />
+                    {error && <span className="error">{error}</span>}
 
                 </div>
                 <div className="search-wrapper-select">
@@ -59,7 +81,7 @@ const SearcherComponent = () => {
 const StyledSearcher = styled.div`
     text-align: center;
     color: var(--textWhite);
-    min-width: 45%;
+    min-width: 55%;
     margin-bottom: 5rem;
 
 
@@ -75,10 +97,13 @@ const StyledSearcher = styled.div`
 }
 .logo{
     display: block;
-    margin: auto;
+    margin: ${({onData}) => onData ? "0" : "auto" };
+    margin-right: ${({onData}) => onData ? "2rem" : "auto" };
+
 }
 .search-title-wrapper{
-    margin-bottom: 3rem;
+    display: ${({onData}) => onData ? "flex" : "box" };
+    margin-bottom: ${({onData}) => onData ? "1rem" : "3rem" };
 }
 .search-wrapper{
   background-color: #161b22;
@@ -104,7 +129,7 @@ input:focus, select:focus{
 
 .search-wrapper input, select{
     margin-top: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     display: block;
     width: 100%;
     padding: 10px 12px;
@@ -115,6 +140,7 @@ input:focus, select:focus{
     border: 1px solid #21262d;
     border-radius: 6px;
     outline: none;
+   
 }
 
 .search-label{
@@ -124,18 +150,21 @@ input:focus, select:focus{
   font-weight: 400;
   text-align: left;
 }
-/* .error-section{
+.error{
   color: #ff7b72;
-  padding: 15px 20px;
-  margin: 0 auto 10px;
   font-size: 13px;
-  border-style: solid;
-  border-color: rgb(248 81 73 / 40%);
-  border-width: 1px;
-  border-radius: 6px;
-  background-image: linear-gradient(rgb(248 81 73 / 10%),rgb(248 81 73 / 10%));
-} */
+  display: flex;
+  margin-left: 0.4rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+@media screen and (max-width: 450px) {
+    width: 100%;
 
+    .search-wrapper{
+       flex-direction: column;
+    }
+}
 
 
 `;

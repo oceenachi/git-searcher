@@ -11,11 +11,12 @@ import { MoonLoader } from 'react-spinners';
 import { makeCall } from '../redux/action';
 
 
-const ParentBody = ({ onType }) => {
+const ParentBody = () => {
 
 
 
   // console.log({ dat: configStore.store.getState() })
+  const[onData, setOnData] = useState(false);
 
 
   //use dispatch hook
@@ -45,6 +46,13 @@ const ParentBody = ({ onType }) => {
     }
   });
 
+  useEffect(() => {
+    if(!(response.items.length === 0 )){
+      setOnData(true);
+    }
+   
+  }, [response.items])
+
   // const { total_count } = response;
 
   // custom data to fetch more data
@@ -53,33 +61,37 @@ const ParentBody = ({ onType }) => {
     console.log({entity2: {...entity}})
     dispatch(makeCall({ ...entity, page: ++response.page }));
   }
+  console.log({onData})
 
-  // console.log({ response })
+  console.log({ response })
 
 
   // console.log({ entity });
 
   return (
-    <StyledParentBody className="parentBody container" onType={onType}>
-      <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity}/>
+    <NewParentBody className="container">
+          
+    <StyledParentBody className="parentBody" onData={onData}>
+     
+     <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity} onData={onData}/>
 
-      <InfiniteScroll
-        dataLength={response.items.length}
-        next={fetchMoreData}
-        hasMore={!response.incomplete_results}
-        loader={<MoonLoader />}
-        className="scrollComponent"
-      >
-        <div className="card-parent">
-          {entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
-        </div>
+   </StyledParentBody>
+   <InfiniteScroll
+       dataLength={response.items.length}
+       next={fetchMoreData}
+       hasMore={true}
+       loader={<MoonLoader />}
+       className="scrollComponent"
+     >
+       <div className="card-parent">
+         {entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
+       </div>
 
-      </InfiniteScroll>
+     </InfiniteScroll>
 
 
+    </NewParentBody>
 
-
-    </StyledParentBody>
   )
 }
 
@@ -98,34 +110,37 @@ to{
 const StyledParentBody = styled.div`
 
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  height: 100vh;
-  flex-direction: ${({ onType }) => onType ? "row" : "column"};
-  align-items: ${({ onType }) => onType ? "flex-start" : "center"};
-  justify-content: ${({ onType }) => onType ? "flex-start" : "space-around"};
+  flex-direction: ${({ onData }) => onData ? "row" : "column"};
+  align-items: ${({ onData }) => onData ? "flex-start" : "center"};
+  justify-content: ${({ onData }) => onData ? "flex-start" : "space-around"};
+  height: ${({ onData }) => onData ? "auto" : "100%"};
   position: relative;
-  animation: ${({ onType }) => onType ? rotate : null} 2s linear;
+  animation: ${({ onData }) => onData ? rotate : null} .5s linear;
+  width: 100%;
+  border: 1px solid yellow;
+
+`;
+const NewParentBody = styled.div`
+  height: ${({ onData }) => onData ? "100%" : "100vh"};
   width: 100%;
   overflow-y: scroll;
   border: 1px white solid;
+  .card-parent{
+    display: grid;
+    grid-gap: 3.5rem;
+    /* grid-template-columns: repeat(auto-fit, minmax(27rem, 33rem)); */
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    justify-content: center;
+    border: 1px red solid;
+  }
 
   .infinite-scroll-component__outerdiv, .scrollComponent {
     width: 100%;
   }
 
-  .card-parent{
-    display: grid;
-    grid-gap: 3.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(27rem, 33rem));
-    width: 100%;
-    justify-content: center;
-  }
- 
-
-
 `;
+
 
 
 export default ParentBody
