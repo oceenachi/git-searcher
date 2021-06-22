@@ -15,6 +15,7 @@ const ParentBody = () => {
 
   const [onData, setOnData] = useState(false);
 
+  // Extract a piece of the redux store
   const errorState = useSelector(state => state.errorReducer.error);
 
 
@@ -32,7 +33,7 @@ const ParentBody = () => {
   // Get entity param from redux store
   const response = useSelector((state) => {
 
-    if (entity.entity == 'users') {
+    if (entity.entity === 'users') {
       return state.userSearchReducer[entity.query] || {
         items: []
       }

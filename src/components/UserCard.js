@@ -9,10 +9,10 @@ import { ScaleLoader } from 'react-spinners';
 
 
 const UserCard = ({ bio }) => {
-    const [loadUser, setLoadUser] = useState(false)
+    const [loadUser, setLoadUser] = useState(false);
+    const dispatch = useDispatch();
 
     const singleUser = useSelector((state) => state.usersReducer[bio.login]);
-
 
     //effect hook to fetch users
     useEffect(() => {
@@ -24,82 +24,10 @@ const UserCard = ({ bio }) => {
             setLoadUser(true)
 
         }
-
+    // eslint-disable-next-line
     }, [])
 
 
-    // console.log({ singleUser });
-
-    /*
-        {
-            "login": "todo",
-            "id": 57632,
-            "node_id": "MDQ6VXNlcjU3NjMy",
-            "avatar_url": "https://avatars.githubusercontent.com/u/57632?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/todo",
-            "html_url": "https://github.com/todo",
-            "followers_url": "https://api.github.com/users/todo/followers",
-            "following_url": "https://api.github.com/users/todo/following{/other_user}",
-            "gists_url": "https://api.github.com/users/todo/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/todo/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/todo/subscriptions",
-            "organizations_url": "https://api.github.com/users/todo/orgs",
-            "repos_url": "https://api.github.com/users/todo/repos",
-            "events_url": "https://api.github.com/users/todo/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/todo/received_events",
-            "type": "User",
-            "site_admin": false,
-            "score": 1.0
-        }
-
-        {
-    "login": "todo",
-    "id": 57632,
-    "node_id": "MDQ6VXNlcjU3NjMy",
-    "avatar_url": "https://avatars.githubusercontent.com/u/57632?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/todo",
-    "html_url": "https://github.com/todo",
-    "followers_url": "https://api.github.com/users/todo/followers",
-    "following_url": "https://api.github.com/users/todo/following{/other_user}",
-    "gists_url": "https://api.github.com/users/todo/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/todo/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/todo/subscriptions",
-    "organizations_url": "https://api.github.com/users/todo/orgs",
-    "repos_url": "https://api.github.com/users/todo/repos",
-    "events_url": "https://api.github.com/users/todo/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/todo/received_events",
-    "type": "User",
-    "site_admin": false,
-    "name": "Yu-Lun Chen",
-    "company": null,
-    "blog": "",
-    "location": null,
-    "email": null,
-    "hireable": null,
-    "bio": null,
-    "twitter_username": null,
-    "public_repos": 82,
-    "public_gists": 0,
-    "followers": 32,
-    "following": 10,
-    "created_at": "2009-02-24T21:42:57Z",
-    "updated_at": "2021-05-18T00:55:29Z"
-}
-
-    */
-
-    // const [fetchUser, setFetchUser] = useState(bio.url);
-
-    // const [user, setUser] = useState({})
-
-
-    const dispatch = useDispatch();
-
-    // const handleChange = (e) => {
-    //     setFetchDetails({...fetchDetails, [e.target.name]: e.target.value})
-    // }
 
     //custom hook to watch for user loaded states
     useEffect(() => {
@@ -137,13 +65,13 @@ const UserCard = ({ bio }) => {
                         <span className="git-icon">
                             <BsLink45Deg />
                         </span>
-                        <a href={singleUser.blog} target="_blank">{singleUser.blog || "Not available"}</a>
+                        <a href={singleUser.blog} rel="noreferrer" target="_blank">{singleUser.blog || "Not available"}</a>
                     </p>
                     <p title="Twitter" className="info twitter">
                         <span className="git-icon">
                             <VscTwitter />
                         </span>
-                        <a href={`https://twitter.com/${singleUser.twitter_username}`} target="_blank">{`@${singleUser.twitter_username}` || "Not available"}</a>
+                        <a href={`https://twitter.com/${singleUser.twitter_username}`} rel="noreferrer" target="_blank">{`@${singleUser.twitter_username}` || "Not available"}</a>
                     </p>
                     <p title="Company" className="info Company">
                         <span className="git-icon">

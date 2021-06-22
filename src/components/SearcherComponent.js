@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { changeParams, makeCall, loading } from '../redux/action';
+import {  makeCall } from '../redux/action';
 import useDebounce from '../utils/useDebounce';
 import { ScaleLoader } from 'react-spinners';
 
@@ -11,38 +10,28 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, onData }) => {
     //custom dispatch hook
     const dispatch = useDispatch();
 
-    const [timeCleaner, setTimeCleaner] = useState(null)
+    const [timeCleaner, setTimeCleaner] = useState(null);
+    const [load, setLoad] = useState(false);
+
 
     // Searching status (whether there is pending API request)
-    const [searching, setIsSearching] = useState(false);
     const [error, setError] = useState("");
-    const searchContent = useSelector((state) => (state.searchReducer));
-    console.log({ searchContent })
 
 
+    //custom function to clear data on error
     const clearData = (fetchDetails) => {
-
         const timer = setTimeout(() => {
 
-           
             let data = { ...fetchDetails, query: "" }
             setFetchDetails(() => data);
 
         }, 3000);
 
-        return () => { 
-            console.log('clearing timer') ;
-            // setError("");
+        return () => {
             clearTimeout(timer);
         }
 
     }
-    // console.log(load)
-
-
-    const [load, setLoad] = useState(false)
-
-    // console.log({props})
 
 
     //custom  handle change method for input and select component
@@ -52,8 +41,6 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, onData }) => {
         let data = { ...fetchDetails, [e.target.name]: e.target.value, page: 1 }
         setFetchDetails(() => data)
 
-        console.log({ fetchDetails })
-
         if (data.query.length > 2) {
             setLoad(true);
             setError("");
@@ -62,7 +49,6 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, onData }) => {
 
     // Debounce search term so that it only gives us latest value ...
     const debouncedQuery = useDebounce(fetchDetails.query, 2000);
-    console.log({ debouncedQuery, fetchDetails });
 
 
     //custom hook to search github
@@ -70,25 +56,18 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, onData }) => {
 
         if (fetchDetails.query && fetchDetails.query.length >= 3 && debouncedQuery && debouncedQuery.length >= 3) {
 
-            console.log("fired one")
-            console.log({ debouncedQuery });
-            console.log(fetchDetails.query)
-            setIsSearching(true);
-            console.log({ load })
+
             setError("");
             dispatch(makeCall(fetchDetails)).then(() => {
 
                 setLoad(false);
             });
-        } else if ((fetchDetails.query != "" && fetchDetails.query.length < 3) || (debouncedQuery != "" && debouncedQuery.length < 3)) {
+        } else if ((fetchDetails.query !== "" && fetchDetails.query.length < 3) || (debouncedQuery !== "" && debouncedQuery.length < 3)) {
             setError("Query must be more than 2 characters");
             setTimeCleaner(clearData(fetchDetails));
 
         }
-        setIsSearching(false);
-
-
-        // dispatch(changeParams(fetchDetails));
+     // eslint-disable-next-line
     }, [fetchDetails])
 
     return (

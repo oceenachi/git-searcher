@@ -1,5 +1,13 @@
 import {combineReducers} from 'redux';
-import { repoSearchReducer, userSearchReducer, usersReducer, searchReducer, errorReducer} from "./reducers/entityReducer";
+import { searchReducer} from "./reducers/searchReducer";
+import { userSearchReducer } from "./reducers/userSearchReducer";
+import { errorReducer } from "./reducers/errorReducer";
+import { repoSearchReducer } from "./reducers/repoSearchReducer";
+import { usersReducer } from "./reducers/usersReducer";
+
+
+
+
 
 
 const rootReducer = combineReducers({
