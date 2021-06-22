@@ -24,7 +24,7 @@ const ParentBody = ({ onType }) => {
 
 
   // Get entity param from redux store
-  const entity = useSelector((state) => state.searchReducer);
+  const [entity, setEntity] = useState({query: '', entity: 'users'});
 
 
 
@@ -61,7 +61,7 @@ const ParentBody = ({ onType }) => {
 
   return (
     <StyledParentBody className="parentBody container" onType={onType}>
-      <SearcherComponent />
+      <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity}/>
 
       <InfiniteScroll
         dataLength={response.items.length}
@@ -96,12 +96,12 @@ to{
 `;
 
 const StyledParentBody = styled.div`
-/* 
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around; */
-  height: 100%;
+  justify-content: space-around;
+  height: 100vh;
   flex-direction: ${({ onType }) => onType ? "row" : "column"};
   align-items: ${({ onType }) => onType ? "flex-start" : "center"};
   justify-content: ${({ onType }) => onType ? "flex-start" : "space-around"};
@@ -122,6 +122,8 @@ const StyledParentBody = styled.div`
     width: 100%;
     justify-content: center;
   }
+ 
+
 
 `;
 
