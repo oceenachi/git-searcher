@@ -6,7 +6,7 @@ import useDebounce from '../utils/useDebounce';
 import { ScaleLoader } from 'react-spinners';
 
 
-const SearcherComponent = ({ fetchDetails, setFetchDetails, onData }) => {
+const SearcherComponent = ({ fetchDetails, setFetchDetails, isEmpty }) => {
     //custom dispatch hook
     const dispatch = useDispatch();
 
@@ -65,13 +65,12 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, onData }) => {
         } else if ((fetchDetails.query !== "" && fetchDetails.query.length < 3) || (debouncedQuery !== "" && debouncedQuery.length < 3)) {
             setError("Query must be more than 2 characters");
             setTimeCleaner(clearData(fetchDetails));
-
         }
      // eslint-disable-next-line
     }, [fetchDetails])
 
     return (
-        <StyledSearcher onData={onData}>
+        <StyledSearcher isEmpty={isEmpty}>
 
             <div className="search-title-wrapper">
                 <img src="./images/black-github.png" alt="github logo" className="logo" />
@@ -123,13 +122,13 @@ const StyledSearcher = styled.div`
 }
 .logo{
     display: block;
-    margin: ${({ onData }) => onData ? "0" : "auto"};
-    margin-right: ${({ onData }) => onData ? "2rem" : "auto"};
+    margin: ${({ isEmpty }) => isEmpty ? "0" : "auto"};
+    margin-right: ${({ isEmpty }) => isEmpty ? "2rem" : "auto"};
 
 }
 .search-title-wrapper{
-    display: ${({ onData }) => onData ? "flex" : "box"};
-    margin-bottom: ${({ onData }) => onData ? "1rem" : "3rem"};
+    display: ${({ isEmpty }) => isEmpty ? "flex" : "box"};
+    margin-bottom: ${({ isEmpty }) => isEmpty ? "1rem" : "3rem"};
 }
 .search-wrapper{
   background-color: #161b22;
