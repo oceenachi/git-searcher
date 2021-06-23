@@ -6,7 +6,7 @@ import useDebounce from '../utils/useDebounce';
 import { ScaleLoader } from 'react-spinners';
 
 
-const SearcherComponent = ({ fetchDetails, setFetchDetails, isEmpty }) => {
+const SearcherComponent = ({ fetchDetails, setFetchDetails, Data }) => {
     //custom dispatch hook
     const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, isEmpty }) => {
             let data = { ...fetchDetails, query: "" }
             setFetchDetails(() => data);
 
-        }, 3000);
+        }, 2000);
 
         return () => {
             clearTimeout(timer);
@@ -40,7 +40,7 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, isEmpty }) => {
         timeCleaner && timeCleaner()
         let data = { ...fetchDetails, [e.target.name]: e.target.value, page: 1 }
         setFetchDetails(() => data)
-
+        
         if (data.query.length > 2) {
             setLoad(true);
             setError("");
@@ -54,7 +54,7 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, isEmpty }) => {
     //custom hook to search github
     useEffect(() => {
 
-        if (fetchDetails.query && fetchDetails.query.length >= 3 && debouncedQuery && debouncedQuery.length >= 3) {
+        if ((fetchDetails.query && fetchDetails.query.length >= 3) || (debouncedQuery && debouncedQuery.length >= 3)) {
 
 
             setError("");
@@ -66,11 +66,11 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, isEmpty }) => {
             setError("Query must be more than 2 characters");
             setTimeCleaner(clearData(fetchDetails));
         }
-     // eslint-disable-next-line
+        // eslint-disable-next-line 
     }, [fetchDetails])
 
     return (
-        <StyledSearcher isEmpty={isEmpty}>
+        <StyledSearcher Data={Data}>
 
             <div className="search-title-wrapper">
                 <img src="./images/black-github.png" alt="github logo" className="logo" />
@@ -122,13 +122,13 @@ const StyledSearcher = styled.div`
 }
 .logo{
     display: block;
-    margin: ${({ isEmpty }) => isEmpty ? "0" : "auto"};
-    margin-right: ${({ isEmpty }) => isEmpty ? "2rem" : "auto"};
+    margin: ${({ Data }) => Data ? "0" : "auto"};
+    margin-right: ${({ Data }) => Data ? "2rem" : "auto"};
 
 }
 .search-title-wrapper{
-    display: ${({ isEmpty }) => isEmpty ? "flex" : "box"};
-    margin-bottom: ${({ isEmpty }) => isEmpty ? "1rem" : "3rem"};
+    display: ${({ Data }) => Data ? "flex" : "box"};
+    margin-bottom: ${({ Data }) => Data ? "1rem" : "3rem"};
 }
 .search-wrapper{
   background-color: #161b22;
