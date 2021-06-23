@@ -7,9 +7,6 @@ import { usersReducer } from "./reducers/usersReducer";
 
 
 
-
-
-
 const rootReducer = combineReducers({
     repoSearchReducer, userSearchReducer, searchReducer, usersReducer, errorReducer
 });

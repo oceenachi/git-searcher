@@ -37,22 +37,27 @@ export const error = (payload) => ({
 
 //make call to the api to search for quert
 export const makeCall = ({ entity, query, page }) => async (dispatch) => {
-    let perPage = 30;
+    if (query.trim().length < 3 ) {
+        
+    } else{
+        let perPage = 30;
+    
+        const { response } = await apiGet(`${process.env.REACT_APP_SEARCH_URL}/${entity}?q=${query}&per_page=${perPage}&page=${page}`);
+    
+        if (response.status === 200) {
 
-    const { response } = await apiGet(`${process.env.REACT_APP_SEARCH_URL}/${entity}?q=${query}&per_page=${perPage}&page=${page}`);
-
-    if (response.status === 200) {
-        if (!response.data.items.length) {
-            dispatch("No data available");
-        }
-        if (entity === "users") {
-
-            stripUserSearchData(response);
-
-            dispatch(callUserSuccess({ query, data: { ...response.data, page } }, page))
-        } else {
-            stripRepoSearchData(response)
-            dispatch(callRepoSuccess({ query, data: { ...response.data, page } }, page))
+            if (!response.data.items.length) {
+                dispatch(error("No data available"));
+            }
+            if (entity === "users") {
+    
+                stripUserSearchData(response);
+    
+                dispatch(callUserSuccess({ query, data: { ...response.data, page } }, page))
+            } else {
+                stripRepoSearchData(response)
+                dispatch(callRepoSuccess({ query, data: { ...response.data, page } }, page))
+            }
         }
     }
     dispatch(loading(false));
@@ -71,6 +76,10 @@ export const getCall = (url) => async (dispatch) => {
     }
 
 }
+
+// export const fetchObjectAndCount = (url) => async (dispatch) => {
+//     const {response} = await apiGet();
+// }
 
 
 // fetch single card users
@@ -123,11 +132,11 @@ const stripRepoSearchData = (payload) => {
 const stripUsersData = (payload) => {
     let userItem = payload.data;
     const {
-        bio, avatar_url, email, followers, following, hireable, location, login, name, twitter_username, url
+        bio, avatar_url, email, followers, following, hireable, location, login, name, twitter_username, url, repos_url, gists_url, starred_url
     } = userItem;
 
     payload.data = {
-        bio, avatar_url, email, followers, following, hireable, location, login, name, twitter_username, url
+        bio, avatar_url, email, followers, following, hireable, location, login, name, twitter_username, url, repos_url, gists_url, starred_url
 
 
     }
