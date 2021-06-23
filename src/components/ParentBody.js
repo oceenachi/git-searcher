@@ -57,7 +57,7 @@ const ParentBody = () => {
       setIsEmpty(true);
     }
 
-  }, [response.items])
+  }, [queryState.query])
 
   // custom data to fetch more data
   const fetchMoreData = () => {
@@ -65,11 +65,11 @@ const ParentBody = () => {
   }
 
   return (
-    <NewParentBody className="container" isEmpty={isEmpty} onData={onData}>
+    <NewParentBody className="container" isEmpty={isEmpty} Data={onData}>
 
-      <StyledParentBody className="parentBody"  isEmpty={isEmpty} onData={onData}>
+      <StyledParentBody className="parentBody"  isEmpty={isEmpty} Data={onData}>
 
-        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity}  isEmpty={isEmpty} onData={onData} />
+        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity}  isEmpty={isEmpty} Data={onData} />
 
       </StyledParentBody>
       <InfiniteScroll
@@ -106,23 +106,17 @@ to{
 
 const StyledParentBody = styled.div`
   display: flex;
-  /* flex-direction: ${({ onData }) => onData ? "row" : "column"};
-  align-items: ${({ onData }) => onData ? "flex-start" : "center"};
-  justify-content: ${({ onData }) => onData ? "flex-start" : "center"};
-  height: ${({ onData }) => onData ? "auto" : "100%"};
+  flex-direction: ${({ Data }) => Data ? "row" : "column"};
+  align-items: ${({ Data }) => Data ? "flex-start" : "center"};
+  justify-content: ${({ Data }) => Data ? "flex-start" : "center"};
+  height: ${({ Data }) => Data ? "auto" : "100%"};
   position: relative;
-  animation: ${({ onData }) => onData ? rotate : null} .5s linear; */
-  flex-direction: ${({ isEmpty }) => isEmpty ? "row" : "column"};
-  align-items: ${({ isEmpty }) => isEmpty ? "flex-start" : "center"};
-  justify-content: ${({ isEmpty }) => isEmpty ? "flex-start" : "center"};
-  height: ${({ isEmpty }) => isEmpty ? "auto" : "100%"};
-  position: relative;
-  animation: ${({ isEmpty }) => isEmpty ? rotate : null} .5s linear;
+  animation: ${({ Data }) => Data ? rotate : null} .5s linear;
   width: 100%;
 
 `;
 const NewParentBody = styled.div`
-  height: ${({ isEmpty }) => isEmpty ? "100%" : "100vh"};
+  height: ${({ Data }) => Data ? "100%" : "100vh"};
   width: 100%;
   overflow-y: scroll;
   .card-parent{
