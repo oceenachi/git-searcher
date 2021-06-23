@@ -34,6 +34,8 @@ const UserCard = ({ bio }) => {
 
     }, [loadUser])
 
+    console.log({singleUser})
+
     return (
         <StyledUserCard>
             <div className="full-card">
@@ -43,7 +45,7 @@ const UserCard = ({ bio }) => {
                     </div>
                     <div className="brief-intro">
                         <p className="info full-name">{(loadUser && singleUser.name) || "Not available"}</p>
-                        <p className="info login">{`@${(singleUser || bio).login || "Not available"}`}</p>
+                        <p className="info login"><a href={`https://github.com/${(singleUser || bio).login}`}  rel="noreferrer" title="user url" target="_blank" >{`@${(singleUser || bio).login || "Not available"}`}</a> </p>
                         <p className="info bio" title={'bio'}>{
                             loadUser && singleUser.bio && (singleUser.bio?.split(" ").length > 15 ? singleUser.bio?.split(" ").slice(0, 15).join(" ") + "..." : singleUser.bio)
 
@@ -86,9 +88,10 @@ const UserCard = ({ bio }) => {
                 <div className="activity-section">
                     <p title="Repositories"><span className="git-icon"><GoRepo /></span> 150</p>
                     <p title="Github Gist"><span className="git-icon"><BsFileCode className="edit-icon" /></span> 10</p>
-                    <p title="Followers"><span className="git-icon"><BsPeople /></span> 10</p>
-                    <p title="Following"><span className="git-icon"><BsPeople /></span> 10</p>
+                    <p title="Followers"><span className="git-icon"><BsPeople /></span> {singleUser && singleUser.followers}</p>
                     <p title="Github Star"><span className="git-icon"><BsStar /></span> 10</p>
+                    <p title="Following"><span className="git-icon"><BsPeople /></span> {singleUser && singleUser.following}</p>
+
                 </div>
             </div>
 

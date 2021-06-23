@@ -74,11 +74,12 @@ const RepoCard = ({ item }) => {
                         <GoEye /><sub>{watchers_count}</sub>
                     </span>
                     <span>
-                        <AiOutlineStar /><sub>{stargazers_count}</sub>
-                    </span>
-                    <span>
                         <GoOrganization />
                     </span>
+                    <span>
+                        <AiOutlineStar /><sub>{stargazers_count}</sub>
+                    </span>
+                  
 
                 </div>
             </div>

@@ -14,21 +14,17 @@ import { toast } from 'react-toastify';
 const ParentBody = () => {
 
   const [onData, setOnData] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const queryState = useSelector(state => state.searchReducer);
+  const [notEmpty, setNotEmpty] = useState(false);
 
   // Extract a piece of the redux store
   const errorState = useSelector(state => state.errorReducer.error);
-
 
   //use dispatch hook
   const dispatch = useDispatch();
 
 
-
   // manually set entity param state
   const [entity, setEntity] = useState({ query: '', entity: 'users' });
-
 
 
   // Get entity param from redux store
@@ -45,6 +41,7 @@ const ParentBody = () => {
     }
   });
 
+  //custom hook to set data
   useEffect(() => {
     if (!(response.items.length === 0)) {
       setOnData(true);
@@ -53,11 +50,12 @@ const ParentBody = () => {
   }, [response.items])
 
   useEffect(() => {
-    if (queryState.query >= 3) {
-      setIsEmpty(true);
+    if (entity.query.trim().length >= 3) {
+      setNotEmpty(true);
     }
 
-  }, [queryState.query])
+  }, [entity.query])
+
 
   // custom data to fetch more data
   const fetchMoreData = () => {
@@ -65,11 +63,11 @@ const ParentBody = () => {
   }
 
   return (
-    <NewParentBody className="container" isEmpty={isEmpty} Data={onData}>
+    <NewParentBody className="container" notEmpty={notEmpty} Data={onData}>
 
-      <StyledParentBody className="parentBody"  isEmpty={isEmpty} Data={onData}>
+      <StyledParentBody className="parentBody"  notEmpty={notEmpty} Data={onData}>
 
-        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity}  isEmpty={isEmpty} Data={onData} />
+        <SearcherComponent fetchDetails={entity} setFetchDetails={setEntity} setNotEmpty={setNotEmpty} notEmpty={notEmpty} Data={onData} />
 
       </StyledParentBody>
       <InfiniteScroll
@@ -80,12 +78,11 @@ const ParentBody = () => {
         className="scrollComponent"
       >
         <div className="card-parent">
-          {entity && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
+          {(entity.query.length > 2) && response.items.map(item => entity.entity === "users" ? <UserCard bio={item} key={item.id} /> : <RepoCard item={item} key={item.id} />)}
         </div>
 
       </InfiniteScroll>
       {errorState.error && toast.error(errorState.message)}
-
 
     </NewParentBody>
 
@@ -100,23 +97,22 @@ from{
 to{
   left: 0;
   top: 0;
-}
 
-`;
+}`;
 
 const StyledParentBody = styled.div`
   display: flex;
-  flex-direction: ${({ Data }) => Data ? "row" : "column"};
-  align-items: ${({ Data }) => Data ? "flex-start" : "center"};
-  justify-content: ${({ Data }) => Data ? "flex-start" : "center"};
-  height: ${({ Data }) => Data ? "auto" : "100%"};
+  flex-direction: ${({ notEmpty }) => notEmpty ? "row" : "column"};
+  align-items: ${({ notEmpty }) => notEmpty ? "flex-start" : "center"};
+  justify-content: ${({ notEmpty }) => notEmpty ? "flex-start" : "center"};
+  height: ${({ notEmpty }) => notEmpty ? "auto" : "100%"};
   position: relative;
-  animation: ${({ Data }) => Data ? rotate : null} .5s linear;
+  animation: ${({ notEmpty }) => notEmpty ? rotate : null} .5s linear;
   width: 100%;
 
 `;
 const NewParentBody = styled.div`
-  height: ${({ Data }) => Data ? "100%" : "100vh"};
+  height: ${({ notEmpty }) => notEmpty ? "100%" : "100vh"};
   width: 100%;
   overflow-y: scroll;
   .card-parent{

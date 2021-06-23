@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {  makeCall } from '../redux/action';
 import useDebounce from '../utils/useDebounce';
 import { ScaleLoader } from 'react-spinners';
 
 
-const SearcherComponent = ({ fetchDetails, setFetchDetails, Data }) => {
+const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, notEmpty }) => {
     //custom dispatch hook
     const dispatch = useDispatch();
 
@@ -41,36 +41,55 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data }) => {
         let data = { ...fetchDetails, [e.target.name]: e.target.value, page: 1 }
         setFetchDetails(() => data)
         
-        if (data.query.length > 2) {
+        if (data.query.trim().length > 2) {
             setLoad(true);
             setError("");
+        } else {
+            setNotEmpty(false);
         }
     }
 
     // Debounce search term so that it only gives us latest value ...
-    const debouncedQuery = useDebounce(fetchDetails.query, 2000);
+    const debouncedQuery = useDebounce(fetchDetails.query.trim(), 2000);
+
+    let stateSelector = {
+        users: 'userSearchReducer',
+        repositories: 'repoSearchReducer'
+    }
+    let selector = stateSelector[fetchDetails.entity]
+    const requestState = useSelector(state => state[selector][fetchDetails.query])
 
 
     //custom hook to search github
     useEffect(() => {
 
-        if ((fetchDetails.query && fetchDetails.query.length >= 3) || (debouncedQuery && debouncedQuery.length >= 3)) {
-
-
+        if ((fetchDetails.query.trim() && fetchDetails.query.trim().length >= 3) || (debouncedQuery.trim() && debouncedQuery.trim().length >= 3)) {
+            if (requestState) {
+                console.log('we are not calling anything', requestState)
+                return setLoad(false)
+            }
             setError("");
             dispatch(makeCall(fetchDetails)).then(() => {
 
                 setLoad(false);
             });
-        } else if ((fetchDetails.query !== "" && fetchDetails.query.length < 3) || (debouncedQuery !== "" && debouncedQuery.length < 3)) {
-            setError("Query must be more than 2 characters");
+        } else if(fetchDetails.query.length > 0 || debouncedQuery.length > 0 ){
+            setNotEmpty(false)
+            if(fetchDetails.query.trim().length === 0|| debouncedQuery.trim().length === 0){
+                setError("Input a search keyword");
+            }
+            else if((fetchDetails.query.trim().length  > 0 && fetchDetails.query.trim().length < 3) || (debouncedQuery.trim().length > 0 && debouncedQuery.trim().length < 3)){
+                setError("Search keyword must be more than 2 characters");
             setTimeCleaner(clearData(fetchDetails));
+            }
         }
+
+
         // eslint-disable-next-line 
     }, [fetchDetails])
 
     return (
-        <StyledSearcher Data={Data}>
+        <StyledSearcher Data={Data} notEmpty={notEmpty}>
 
             <div className="search-title-wrapper">
                 <img src="./images/black-github.png" alt="github logo" className="logo" />
@@ -122,13 +141,13 @@ const StyledSearcher = styled.div`
 }
 .logo{
     display: block;
-    margin: ${({ Data }) => Data ? "0" : "auto"};
-    margin-right: ${({ Data }) => Data ? "2rem" : "auto"};
+    margin: ${({ notEmpty }) => notEmpty ? "0" : "auto"};
+    margin-right: ${({ notEmpty }) => notEmpty ? "2rem" : "auto"};
 
 }
 .search-title-wrapper{
-    display: ${({ Data }) => Data ? "flex" : "box"};
-    margin-bottom: ${({ Data }) => Data ? "1rem" : "3rem"};
+    display: ${({ notEmpty }) => notEmpty ? "flex" : "box"};
+    margin-bottom: ${({ notEmpty }) => notEmpty ? "1rem" : "3rem"};
 }
 .search-wrapper{
   background-color: #161b22;

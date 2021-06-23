@@ -19,7 +19,7 @@ function handleSuccess(response){
 
 }
 
-//custom api helper to make http requests
+// custom api helper to make http requests
 export const apiGet= (path)=>{
     // add token generared from github as Authorization
     const config = {
