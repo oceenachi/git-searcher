@@ -112,12 +112,6 @@ const StyledParentBody = styled.div`
   height: ${({ Data }) => Data ? "auto" : "100%"};
   position: relative;
   animation: ${({ Data }) => Data ? rotate : null} .5s linear;
-  /* flex-direction: ${({ isEmpty }) => isEmpty ? "row" : "column"};
-  align-items: ${({ isEmpty }) => isEmpty ? "flex-start" : "center"};
-  justify-content: ${({ isEmpty }) => isEmpty ? "flex-start" : "center"};
-  height: ${({ isEmpty }) => isEmpty ? "auto" : "100%"};
-  position: relative;
-  animation: ${({ isEmpty }) => isEmpty ? rotate : null} .5s linear; */
   width: 100%;
 
 `;
