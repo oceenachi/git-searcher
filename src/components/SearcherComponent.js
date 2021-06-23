@@ -65,7 +65,6 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, n
 
         if ((fetchDetails.query.trim() && fetchDetails.query.trim().length >= 3) || (debouncedQuery.trim() && debouncedQuery.trim().length >= 3)) {
             if (requestState) {
-                console.log('we are not calling anything', requestState)
                 return setLoad(false)
             }
             setError("");

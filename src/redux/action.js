@@ -44,8 +44,6 @@ export const makeCall = ({ entity, query, page }) => async (dispatch) => {
     
         const { response } = await apiGet(`${process.env.REACT_APP_SEARCH_URL}/${entity}?q=${query}&per_page=${perPage}&page=${page}`);
     
-        console.log({response})
-
         if (response.status === 200) {
 
             if (!response.data.items.length) {

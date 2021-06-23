@@ -34,8 +34,6 @@ const UserCard = ({ bio }) => {
 
     }, [loadUser])
 
-    console.log({singleUser})
-
     return (
         <StyledUserCard>
             <div className="full-card">
