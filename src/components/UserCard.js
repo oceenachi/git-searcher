@@ -22,12 +22,10 @@ const UserCard = ({ bio }) => {
             });
         } else {
             setLoadUser(true)
-
         }
     // eslint-disable-next-line
     }, [])
-
-
+    
 
     //custom hook to watch for user loaded states
     useEffect(() => {

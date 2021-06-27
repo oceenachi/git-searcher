@@ -4,7 +4,7 @@ import * as types from "./types";
 
 // action to dispatch repo search success
 export const callRepoSuccess = (payload, page) => ({
-    type: page < 2 ? types.REPO_CALL_SUCCESS : types.UPDATE_USER_SUCCESS,
+    type: page < 2 ? types.REPO_CALL_SUCCESS : types.UPDATE_REPO_SUCCESS,
     payload,
 })
 
@@ -35,7 +35,7 @@ export const error = (payload) => ({
 
 
 
-//make call to the api to search for quert
+//make call to the api to search for query
 export const makeCall = ({ entity, query, page }) => async (dispatch) => {
     if (query.trim().length < 3 ) {
         
@@ -47,12 +47,11 @@ export const makeCall = ({ entity, query, page }) => async (dispatch) => {
         if (response.status === 200) {
 
             if (!response.data.items.length) {
-                dispatch(error("No data available"));
+                dispatch(error({message: "No data available", error: true}));
             }
             if (entity === "users") {
     
                 stripUserSearchData(response);
-    
                 dispatch(callUserSuccess({ query, data: { ...response.data, page } }, page))
             } else {
                 stripRepoSearchData(response)
@@ -62,24 +61,7 @@ export const makeCall = ({ entity, query, page }) => async (dispatch) => {
     }
     dispatch(loading(false));
 
-
 }
-
-
-// make get call
-export const getCall = (url) => async (dispatch) => {
-
-    const { response } = await apiGet(url);
-
-    if (response.status === 200) {
-        dispatch(callRepoSuccess(response.data))
-    }
-
-}
-
-// export const fetchObjectAndCount = (url) => async (dispatch) => {
-//     const {response} = await apiGet();
-// }
 
 
 // fetch single card users
@@ -91,12 +73,11 @@ export const getUsers = (login, url) => async (dispatch) => {
         stripUsersData(response)
         dispatch(userSuccess({ login, data: response.data }));
     }
-
 }
+
 
 //action to change input params
 export const changeParams = (payload) => ({
-
     type: types.CHANGE_FETCH_PARAM,
     payload
 })
