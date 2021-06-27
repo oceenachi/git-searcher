@@ -22,6 +22,8 @@ const RepoCard = ({ item }) => {
             dispatch(getUsers(item.owner.login, item.owner.url)).then(() => {
                 setLoading(false);
             });
+        } else {
+            setLoading(false)
         }
             // eslint-disable-next-line
     }, [])

@@ -4,6 +4,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import configStore from "./redux/configureStore";
 import { MoonLoader } from "react-spinners";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import ErrorBoundary from "./components/ErrorBoundary";
 const ParentBody = React.lazy(() => import("./components/ParentBody"));
 

@@ -7,7 +7,7 @@ import UserCard from './UserCard';
 import { useDispatch } from "react-redux";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MoonLoader } from 'react-spinners';
-import { makeCall } from '../redux/action';
+import { error, makeCall } from '../redux/action';
 import { toast } from 'react-toastify';
 
 
@@ -17,11 +17,19 @@ const ParentBody = () => {
   const [notEmpty, setNotEmpty] = useState(false);
 
   // Extract a piece of the redux store
-  const errorState = useSelector(state => state.errorReducer.error);
+  const errorState = useSelector(state => state.errorReducer);
+
+  useEffect(() => {
+ 
+    if(errorState.error){
+      toast.error(errorState.message);
+    }
+    dispatch(error({message: "", error: false}))
+    // eslint-disable-next-line
+  }, [errorState.error, errorState.message])
 
   //use dispatch hook
   const dispatch = useDispatch();
-
 
   // manually set entity param state
   const [entity, setEntity] = useState({ query: '', entity: 'users' });
@@ -54,10 +62,10 @@ const ParentBody = () => {
       setNotEmpty(true);
     }
 
-  }, [entity.query])
+  }, [entity.query]);
 
 
-  // custom data to fetch more data
+  // custom function to fetch more data
   const fetchMoreData = () => {
     dispatch(makeCall({ ...entity, page: ++response.page }));
   }
@@ -82,7 +90,6 @@ const ParentBody = () => {
         </div>
 
       </InfiniteScroll>
-      {errorState.error && toast.error(errorState.message)}
 
     </NewParentBody>
 
