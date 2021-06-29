@@ -139,7 +139,6 @@ test('should return the initial state', () => {
 
     }
     let previousState = {"like":{ ...data}};
-    console.log({previousState})
     
   expect(repoSearchReducer(previousState, callRepoSuccess({query: 'like', data: {...data[0], page: 2}}, 2))['like'].items).toHaveLength(3);
 

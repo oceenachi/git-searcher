@@ -14,7 +14,7 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, n
     const [load, setLoad] = useState(false);
 
 
-    // Searching status (whether there is pending API request)
+    // Searching status whether there is pending API request)
     const [error, setError] = useState("");
 
 
@@ -23,10 +23,11 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, n
         const timer = setTimeout(() => {
 
             let data = { ...fetchDetails, query: "" }
-            setFetchDetails(() => data);
+            setError("")
+            setFetchDetails(data);
 
         }, 2000);
-
+        //cleanup
         return () => {
             clearTimeout(timer);
         }
@@ -45,6 +46,7 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, n
             setLoad(true);
             setError("");
         } else {
+            setLoad(false);
             setNotEmpty(false);
         }
     }
@@ -60,12 +62,11 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, n
     const requestState = useSelector(state => state[selector][fetchDetails.query])
 
 
-    //custom hook to search github
+    //custom call to search github
     useEffect(() => {
-
-        if ((fetchDetails.query.trim() && fetchDetails.query.trim().length >= 3) || (debouncedQuery.trim() && debouncedQuery.trim().length >= 3)) {
+        if ( (debouncedQuery.trim() && debouncedQuery.trim().length >= 3)) {
             if (requestState) {
-                return setLoad(false)
+                return setLoad(false);
             }
             setError("");
             dispatch(makeCall(fetchDetails)).then(() => {
@@ -74,18 +75,19 @@ const SearcherComponent = ({ fetchDetails, setFetchDetails, Data, setNotEmpty, n
             });
         } else if(fetchDetails.query.length > 0 || debouncedQuery.length > 0 ){
             setNotEmpty(false)
-            if(fetchDetails.query.trim().length === 0|| debouncedQuery.trim().length === 0){
+            if(fetchDetails.query.trim().length === 0){
                 setError("Input a search keyword");
             }
-            else if((fetchDetails.query.trim().length  > 0 && fetchDetails.query.trim().length < 3) || (debouncedQuery.trim().length > 0 && debouncedQuery.trim().length < 3)){
+            else if((fetchDetails.query.trim().length  > 0 && fetchDetails.query.trim().length < 3)){
                 setError("Search keyword must be more than 2 characters");
-            setTimeCleaner(clearData(fetchDetails));
+                const cancelCleanUp = clearData(fetchDetails);
+
+                setTimeCleaner(()=>cancelCleanUp);
+
             }
         }
-
-
         // eslint-disable-next-line 
-    }, [fetchDetails])
+    }, [fetchDetails,debouncedQuery])
 
     return (
         <StyledSearcher Data={Data} notEmpty={notEmpty}>

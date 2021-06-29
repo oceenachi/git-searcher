@@ -18,14 +18,14 @@ const UserCard = ({ bio }) => {
     useEffect(() => {
         if (singleUser === undefined) {
             dispatch(getUsers(bio.login, bio.url)).then(() => {
-                setLoadUser(true)
+            setLoadUser(true);
             });
         } else {
             setLoadUser(true)
         }
     // eslint-disable-next-line
     }, [])
-    
+
 
     //custom hook to watch for user loaded states
     useEffect(() => {
