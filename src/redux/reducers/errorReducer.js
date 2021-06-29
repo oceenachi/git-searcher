@@ -3,7 +3,6 @@ import * as types from "../types";
 const initialErrorState = {error: false, message: ""}
 
 export const errorReducer = (state=initialErrorState, action) => {
-    // console.log();
     
     switch(action.type) {
 

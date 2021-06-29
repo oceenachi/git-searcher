@@ -16,6 +16,12 @@ const ParentBody = () => {
   const [onData, setOnData] = useState(false);
   const [notEmpty, setNotEmpty] = useState(false);
 
+  // manually set entity param state
+  const [entity, setEntity] = useState({ query: '', entity: 'users' });
+
+  //use dispatch hook
+  const dispatch = useDispatch();
+
   // Extract a piece of the redux store
   const errorState = useSelector(state => state.errorReducer);
 
@@ -27,12 +33,6 @@ const ParentBody = () => {
     dispatch(error({message: "", error: false}))
     // eslint-disable-next-line
   }, [errorState.error, errorState.message])
-
-  //use dispatch hook
-  const dispatch = useDispatch();
-
-  // manually set entity param state
-  const [entity, setEntity] = useState({ query: '', entity: 'users' });
 
 
   // Get entity param from redux store
@@ -49,13 +49,12 @@ const ParentBody = () => {
     }
   });
 
-  //custom hook to set data
+  //custom hook to set data on response
   useEffect(() => {
     if (!(response.items.length === 0)) {
       setOnData(true);
     }
-
-  }, [response.items])
+  }, [response.items]);
 
   useEffect(() => {
     if (entity.query.trim().length >= 3) {
