@@ -69,3 +69,29 @@ To Visit App:
 [Linkedin Profile](https://www.linkedin.com/in/eze-francisca/)
  
 Link to Github Searcher: [Hosted App](https://unruffled-wiles-c754ee.netlify.app/)
+
+## Project shots
+
+<br/>
+
+#### Welcome View
+![Welcome View](./public/images/welcome.png)
+
+<br/>
+
+#### Error View
+![Error View](./public/images/error.png)
+
+<br/>
+
+#### Search Views
+![Full Screen View](./public/images/fullscreen.png)
+
+<br/>
+
+![Smaller Screen](./public/images/smallscreen.png)
+
+
+
+
+
